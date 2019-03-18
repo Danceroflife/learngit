@@ -1,0 +1,26 @@
+long long Fibonacci(unsigned n )
+{
+	int arr[2]={0,1};
+	//若小于2，则是自己本身
+	if(n<2)
+	{
+		return arr[n];
+	}
+
+	long long fibMin1=1;//定义第一个值为fibMin1
+	long long fibMin2=2;//定义第二个值为fibMin2
+	long long fibN=0;
+
+	for(unsigned int i=2;i<=n;++i)
+	{
+		fibN=fibMin1+fibMin2;//求得前两个值之后即第三个数
+
+		//将fibMin1,fibmin2都向后走一下
+		fibMin1=fibMin2;
+		fibMin2=fibN;
+
+	}
+
+	//得到低N个值即第n-1和第n-2 数值的和
+	return fibN;
+}
