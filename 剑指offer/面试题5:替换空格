@@ -1,0 +1,47 @@
+面试题5:替换空格 把字符串中每个空格替换成%20 例如：we are happy->we%20are%20happy
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+void ReplaceBlank(char string[],int length)
+{
+	if(string==nullptr||length<=0)
+	return ;
+
+	int orignalLength=0;//原数组的长度初始化为0
+	int numberOfBlank=0;//原数组空格的数量初始化为0
+	int i=0;
+	{
+		while(string[i]!='\0')
+		{
+			++orignalLength;//求得原数组的长度
+
+			if(string[i]==' ')
+			++numberOfBlank;//求得原数组中空格的数量
+
+		    ++i;
+		}
+
+		int newLength=orignalLength+numberOfBlank*2;//替换后数组的长度
+		if(newLength>length)
+		return ;
+		
+		int indexOfOriginal=orignalLength;//原数组的最后一个下标即是原数组的长度，数组从0开始，也减少一个\0
+		int indexOfNew=newLength;//新数组的最后一个下标即是新数组的长度
+		while(indexOfOriginal>=0&&indexOfNew>indexOfOriginal)
+		{
+			if(string[indexOfOriginal]==' ')//判断若原数组为空格，则将三个字符替换一个，从后往前替换
+			{
+				string[indexOfNew--]='0';
+				string[indexOfNew--]='2';
+				string[indexOfNew--]='%';
+			}
+			else//若不是空格，则将旧的赋给新的
+			{
+				string[indexOfNew--]=string[indexOfOriginal];
+			}
+			--indexOfOriginal;//旧指针从后往前移动
+		}
+     }
+	printf("%s\n",string) ;
+} 
