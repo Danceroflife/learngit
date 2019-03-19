@@ -1,0 +1,59 @@
+面试题16数值的整数次方 
+// 实现函数double Power(double base,double exponent)，求base的exponent次方，同时不需考虑大数问题
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+//全局变量g_InvaildInput标识是否出错，出错时为true
+bool g_InvaildInput=false;
+
+//n为偶数 a^n=a^n/2*a^n/2
+//n为奇数 a^n=a^(n-1)/2*a^(n-1)/2*a
+double PowerWithUnsignedExponent(double base,unsigned int exponent)
+{
+	//任何数的0次方都为1  由于0的0次方无意义，所以返回0,1均可
+	if(exponent==0)
+		return 1;
+	//任何数的1次方都是自己本身
+	if(exponent==1)
+		return base;
+	
+	//使用递归函数，用右移运算符代替了除以2  位运算的效率比乘除法及求余运算的效率高
+	double result=PowerWithUnsignedExponent(base,exponent>>1);
+	result*=result;
+	//用位与运算符代替了求余运算符来判断是否为奇数
+	if((exponent & 0x1)==1)
+		result*=base;
+
+	return result;
+}
+ 
+bool equal(double num1,double num2)
+{
+	if(num1-num2>=-0.0001&&(num1-num2<=0.0001))
+	{
+		return true;
+	}
+	return false;
+}
+double Power(double base,int exponent)
+{
+	g_InvaildInput=false;
+	//若base为0且指数小于0  
+	if(equal(base,0.0)&&exponent<0) 
+	{
+		g_InvaildInput=true;
+		return 0.0;
+	}
+	//先定义指数为无符号整形
+	unsigned int absExponent=(unsigned int)(exponent);
+	//若指数位负数，先求其绝对值
+	if(exponent<0)
+		absExponent=(unsigned int)(-exponent);
+
+	double result=PowerWithUnsignedExponent(base,absExponent);
+	//若指数位负数，则结果是绝对值结果的倒数
+	if(exponent<0)
+		result=1.0/result;
+
+	return result;
+}
