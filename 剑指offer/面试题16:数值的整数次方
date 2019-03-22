@@ -1,4 +1,4 @@
-面试题16数值的整数次方 
+面试题16：数值的整数次方 
 // 实现函数double Power(double base,double exponent)，求base的exponent次方，同时不需考虑大数问题
 #include<stdio.h>
 #include<stdlib.h>
