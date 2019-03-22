@@ -1,0 +1,92 @@
+//面试题12：矩阵中的路径
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+//是否经过这个格子
+bool hasPathCore(const char* matrix,int rows,int cols,int row,int col,const char* str,int& pathLength,bool* visited)
+{
+	if(str[pathLength]=='\0')   //判断字符串是否遍历结束
+		return true;
+
+	bool hasPath=false;
+	//判断这个格子合法即未访问并且和字符串中的字符一样
+	if(row>=0&&row<rows&&col>=0&&col<cols&&matrix[row*cols+col]==str[pathLength]&&!visited[row*cols+col])
+	{
+		++pathLength;//路径长度加一
+		visited[row*cols+col]=true;//将这个格子置为已访问
+
+		//上下左右遍历矩阵中是否有和字符串中下一个字符一样的字符
+		hasPath=hasPathCore(matrix,rows,cols,row,col-1,str,pathLength,visited)
+		      ||hasPathCore(matrix,rows,cols,row-1,col,str,pathLength,visited)
+		      ||hasPathCore(matrix,rows,cols,row,col+1,str,pathLength,visited)
+		      ||hasPathCore(matrix,rows,cols,row+1,col,str,pathLength,visited);
+
+		//没有路径可走
+		if(!hasPath)
+		{
+			//回溯法回到上一个格子
+			--pathLength;//将回到上一个格子
+			visited[row*cols+col]=false;//将这个格子置为未访问
+		}
+	}
+	return hasPath;
+	}
+
+//判断是否有一条路径
+bool hasPath(char* matrix,int rows,int cols,char* str)   //矩阵，行数，列数,待查找字符串路径
+{
+	if(matrix==nullptr||rows<1||cols<1||str==nullptr)//判断数组合法
+		return false;
+
+	bool *visited=new bool[rows*cols];    //矩阵是否走过
+	memset(visited,0,rows*cols);         //初始化为0
+
+	int pathLength=0;          //初始化路径长度为0
+	for(int row=0;row<rows;++row)
+	{
+		for(int col=0;col<cols;++col)
+		{
+			if(hasPathCore(matrix,rows,cols,row,col,str,pathLength,visited))
+			{
+				return true;
+			}
+		}
+	}
+	delete[] visited;  
+	return false;
+}
+
+void Test(char* testName,char* matrix,int rows,int cols,char* str)
+{
+	if(testName!=NULL)
+	printf("%s begins:",testName);
+
+	if(hasPath(matrix,rows,cols,str)==true)
+		printf("HasPath.\n");
+	else
+		printf("NoPath.\n");
+}
+
+void Test1()
+{
+	char* str="abefi";
+	char matrix[]={"abcdefghi"};
+
+	Test("Test1",(char*)matrix,3,3,str);
+}
+
+void Test2()
+{
+	char* str="abefg";
+	char matrix[]={"abcdefghi"};
+
+	Test("Test2",(char*)matrix,3,3,str);
+}
+int main()
+{
+	Test1();
+	Test2();
+
+	return 0;
+}
