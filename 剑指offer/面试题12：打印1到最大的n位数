@@ -1,0 +1,116 @@
+//打印从1到最大的n位的十进制数，比如输入3，则打印到最大的3位数999
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+/*
+//模拟加法 实现在表示字符串number上加1
+bool Increment(char* number)
+{
+	bool isOverflow=false;//溢出  代表整个n位数未达最大数
+	int nTakeOver=0;//进位
+	int nLength=strlen(number);
+	for(int i=nLength-1;i>=0;i--)
+	{
+		int nSum=number[i]-'0'+nTakeOver;//求出带进位的i的值 每次调用bumber[i]的值已经发生变化，依次是0-9
+		//如果是最个位，加一
+		if(i==nLength-1)    
+			nSum++;
+		//需要进位
+		if(nSum>=10)
+		{ 
+			//最高位number[0]为0，要进位，代表已经是最大数
+			if(i==0)
+				isOverflow=true;
+			else
+			{
+				nSum-=10;
+				//使下一位的开始值从0变为1
+				nTakeOver=1;
+				number[i]='0'+nSum;//该句之后，for 循环跳到字符串的下一位，本位上依旧从0开始，相当于各位恢复到0，下次for循环从十位开始
+			}
+		}
+		else //该位数字在0以内，不需要进位
+		{
+			number[i]='0'+nSum;
+			break;
+		}
+	}
+	return isOverflow;
+}
+*/
+//实现打印number 数字位不够时，前面补0，但补位的0不打印 
+// 将011打印为11     即只有碰到第一个非0的字符之后才开始打印，直至字符串的结尾
+void PrintNumber(char* number)
+{
+	//字符逐个输出
+	bool isBegining0=true;//是否以0开头，默认为true
+	int nLength=strlen(number);
+	for(int i=0;i<nLength;++i)
+	{
+		//如果开头不是0，且isBegining当前值为true,则将isBegining改为false
+		if(isBegining0 && number[i]!='0')
+			isBegining0=false;
+		//只有在isBegining0为false时，才打印输出
+		if(!isBegining0)
+		{
+			printf("%c",number[i]);
+		}
+	}
+	printf("\t");
+}
+/*
+void PrintToMaxOfDigits(int n)
+{
+	if(n<=0)
+		return;
+
+	char *number=new char[n+1];       //长度为n+1的字符串
+	memset(number,'0',n);      //每一个数字都初始化为0
+	number[n]='\0';         //字符串最后一个为 \0
+
+	//如果字符串代表的数字每加一，打印字符串
+	while(!Increment(number))
+	{
+		PrintNumber(number);
+	}
+
+	delete []number;
+}
+*/
+
+
+//用递归实现
+void Print1ToMaxOfDigitsRecuisively(char* number,int length,int index)
+{
+	//递归终止条件 如果是个位，直接打印
+	if(index==length-1)
+	{
+		PrintNumber(number); 
+		return;
+	}
+
+	//递归全排列 个位
+	for(int i=0;i<10;++i)
+	{
+		number[index+1]=i+'0';
+		Print1ToMaxOfDigitsRecuisively(number,length,index+1);
+	}
+}
+//n位上的0-9的全排列
+void PrintToMaxOfNDigits(int n)
+{
+	if(n<=0)
+		return;
+
+	char* number=new char[n+1];
+	number[n]='\0';
+
+	//从高位开始全排列，1-9
+	for(int i=0;i<10;i++)
+	{
+		number[0]=i+'0';
+		Print1ToMaxOfDigitsRecuisively(number,n,0);
+	}
+	delete[] number;//释放内存
+}
