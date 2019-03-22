@@ -1,0 +1,112 @@
+//面试题20：表示数值的字符串
+//实现一个函数用来判断字符串是否表示数值（包括整数和小数）
+//例如，字符串"+100"、"-123","3.1416","5e2"以及“-1E-16都是数值
+//      "12e","1a3.14","1.2.3","1.2.3","+-5","12e+5.4"都不是数值
+//分析：字符串的模式为 A[.[B]][e|EC]或者.B[e|EC]
+// A为整数部分，B紧跟着小数点为数值的小数部分，C为指数部分（如果一个数没有整数部分，则小数部分不能为空）
+#include<stdio.h>
+#include<stdlib.h>
+
+//扫描字符串中的0-9的数位（无符号整数），用来匹配数值模式中的b部分
+bool scanUnsignedInterger(const char** str)
+{
+	const char* before=*str;
+	
+	while(**str!='\0'&&**str>='0'&&**str<='9')
+		++(*str);
+
+	// 当str中存在若干0-9的数字时，返回true
+	return *str>before;
+}
+
+
+//扫描可能带正负号+，-为起始的0-9的数位，用来匹配数值模式中的A C部分 
+bool scanInteger(const char**str)
+{
+	if(**str=='+'||**str=='-')
+		++(*str);
+	return scanUnsignedInterger(str);//得到无符号整数部分
+}
+
+bool isNumberic(const char* str)
+{
+	if(str==nullptr)
+		return false;
+	//判断是否为数字
+	bool numeric=scanInteger(&str);
+
+	// 如果出现’.‘ 接下来是小数部分
+	if(*str=='.')
+	{
+		++str;
+		// 下面一行代码用||的原因：
+        // 1. 小数可以没有整数部分，如.123等于0.123；
+        // 2. 小数点后面可以没有数字，如233.等于233.0；
+        // 3. 小数点前面和后面可以都有数字，如233.666
+		numeric=scanUnsignedInterger(&str)||numeric;
+	}
+	// 如果出现'e'或者'E'，接下来跟着的是数字的指数部分
+	if(*str=='e'||*str=='E')
+	{
+		++str;
+		// 下面一行代码用&&的原因：
+        // 1. 当e或E前面没有数字时，整个字符串不能表示数字，例如.e1、e1；
+        // 2. 当e或E后面没有整数时，整个字个字符串不能表示数字，例如12e、12e+5.4
+		numeric=numeric&&6er(&str);
+	}
+	return numeric&&*str=='\0';
+}
+
+
+void Test1()
+{
+	const char* str="+100";
+	if(isNumberic(str))
+		printf("是数值!\n");
+	else
+		printf("不是数值!\n");
+}
+
+void Test2()
+{
+	const char* str="+5e2";
+	if(isNumberic(str))
+		printf("是数值!\n");
+	else
+		printf("不是数值!\n");
+}
+
+void Test3()
+{
+	const char* str="-1e-16";
+	if(isNumberic(str))
+		printf("是数值!\n");
+	else
+		printf("不是数值!\n");
+}
+
+void Test4()
+{
+	const char* str="12e";
+	if(isNumberic(str))
+		printf("是数值!\n");
+	else
+		printf("不是数值!\n");
+}
+void Test5()
+{
+	const char* str="1a3.14";
+	if(isNumberic(str))
+		printf("是数值!\n");
+	else
+		printf("不是数值!\n");
+}
+int main()
+{
+	Test1();
+	Test2();
+	Test3();
+	Test4();
+	Test5();
+	return 0;
+}
