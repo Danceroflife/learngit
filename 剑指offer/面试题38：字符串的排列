@@ -1,0 +1,32 @@
+void Permutain(char* pStr,char* pBegin)
+{
+	if(*pBegin='\0')
+	{
+		printf("%s\n",pStr);
+	}
+	else
+	{
+		for(char* pCh=pBegin;*pCh!='\0';++pCh)
+		{
+			//交换pBegin和str[i] 
+			char temp=*pCh;
+			*pCh=*pBegin;
+			*pBegin=temp;
+
+			// 递归计算，pBegin的下一个字符为下一轮的首字符
+			Permutain(pStr,pBegin+1);
+
+			// 递归计算，pBegin的下一个字符为下一轮的首字符
+			temp=*pCh;
+			*pCh=*pBegin;
+			*pBegin=temp;
+		}
+	}
+}
+void Permutain(char* pStr)
+{
+	if(pStr==NULL)
+		return;
+
+	Permutain(pStr,pStr);
+}
