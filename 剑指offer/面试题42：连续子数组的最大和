@@ -1,0 +1,26 @@
+面试题42：连续子数组的最大和
+bool g_InvaildInput=false; //定义全局变量来标识是否出错
+int FindGreatestSumOfSubArray(int *pData,int nLength)
+{
+	if((pData==nullptr)||(nLength<=0))
+	{
+		g_InvaildInput=true;
+		return 0;
+	}
+
+	g_InvaildInput=false;
+
+	int nCurSum=0;       //当前连续数组的和
+	int nGreatestSum=0;  //最大连续数组的和
+	for(int i=0;i<nLength;i++)
+	{
+		if(nCurSum<=0)
+			nCurSum=pData[i];
+		else
+			nCurSum+=pData[i];
+
+		if(nCurSum>nGreatestSum)
+			nGreatestSum=nCurSum;
+	}
+	return nGreatestSum;
+}
