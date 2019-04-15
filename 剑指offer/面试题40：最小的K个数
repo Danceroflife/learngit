@@ -91,3 +91,17 @@ void GetLeastNumber(const vector<int>& data,intSet& leastNumber,int k)
 	}
 
 }
+第三种  时间间复杂O(n)，对于一个排序的数组，我们只要输出他的前K个数字即可。我们使用stl里的排序函数进行排序。
+vector<int> GetLeastNumbers_Solution(vector<int> input, int k) 
+{
+        vector<int> result;
+        if(input.size() == 0 || k<=0 || k>input.size()) // 输入不合法的情况
+            return result;
+        sort(input.begin(),input.end());
+        // k不合法 <0 ; k>size? 那么输出空
+        for(int i=0;i<k;++i)
+        {
+            result.push_back(input[i]);
+        }
+        return result;
+  }
