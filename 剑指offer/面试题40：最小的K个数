@@ -1,0 +1,93 @@
+//划分函数 k左边的数据都是小于k的
+//解法一：划分函数
+int partition(int data[],int length,int start,int end)
+{
+	if(data==nullptr||length<=0||start<=0||end>=length)
+		throw new std::exception("Invaild Parameters");
+
+	int index=RandomInRange(start,end);//生成一个在start和end之间的随机数下标 index 
+	Swap(&data[index],&data[end]);//交换两个数字  
+
+	int small=start-1;
+	for(index=start;index<end;++index)
+	{
+		if(data[index]<data[end])
+		{
+			++small;
+			if(small!=index)
+				Swap(&data[index],&data[small]);
+		}
+	}
+	++small;
+	Swap(&data[small],&data[end]);
+
+	return small;// 返回的是随机值index划分后所处的位置即比它小的数字个数
+}
+/*  快排 递归  排序只需将start设为0，把end设为1
+void QuickSort(int data[],int start,int end)
+{
+	if(start==end)
+		return;
+
+	int index=Partition(data,length,start,end);
+	if(index>start)
+		QuickSort(data.length,start,index-1);
+	if(index<end）
+		QuickSort(data,length,index+1,end);
+}
+*/
+
+void GetLeastNumbers(int* input,int* output,int k)
+{
+	if(input==nullptr||output==nullptr||k>n||n<=0||k<=0) //n为输入的个数
+		return;
+
+	int start=0;
+	int end=0;
+	int index=Partition(input,n,start,end);
+	while(index!=k-1)
+	{
+		if(index>k-1)
+		{
+			end=index-1;
+			index=Partiton(input,n,start,end);
+		}
+		else
+		{
+			start=index+1;
+			index=Partition(input,n,start,end);
+		}
+	}
+	for(int i=0;i<k;++i)
+		output[i]=input[i];
+}
+解法二：使用红黑树实现容器multist
+typedef multiset<int,greater<int>>     intSet;// 从大到小排序
+typedef multiset<int,greater<int>>::iterator   setIterator;  // 定义迭代器
+void GetLeastNumber(const vector<int>& data,intSet& leastNumber,int k)
+{
+	leastNumber.clear();
+	if(k<1||data.size()<k)
+		return;
+
+	vector<int>::const_iterator iter=data.begin();
+	for(;iter!=data.end();++iter)
+	{
+		// 将前k个数直接插入进multiset中，注意是小于K，取等号的话会多出一个数字
+		if(leastNumber.size()<k)
+			leastNumbers.insert(*iter);
+		else
+		{
+			 // 因为设置的从大到小排序，故multiset中第一个位置的元素即为最大值
+			setIterator itetGreatest=leastNumber.begin;
+			 // 如果input中当前元素比multiset中最大元素小，则替换；即保持multiset中这k个元素是最小的。
+			if(*iter<*(leastNumber.begin()))
+			{
+				// 替换掉当前最大值
+				leastNumber.erase(iterGreatest);
+				leastNumber.insert(*iter);
+			}
+		}
+	}
+
+}
