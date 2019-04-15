@@ -1,0 +1,55 @@
+把一个字符串的大写字母放到字符串的后面，各个字符的相对位置不变，且不能申请额外的空间。
+
+输入描述:
+
+输入数据有多组，每组包含一个字符串s，且保证:1<=s.length<=1000.
+
+输出描述:
+
+对于每组数据，输出移位后的字符串。
+
+输入例子:
+
+AkleBiCeilD
+
+输出例子:
+
+kleieilABCD
+
+解析：
+题目要求不能申请额外的空间，就是在字符串上进行操作，思路很简单，字符串从后向前处理即可，如下：
+1. 设置两个指针，第一个指针i始终指向已处理过得字串之首（初始为末尾后），第二个指针j前进，当遇到大写字母时停下进行2的操作。
+2. 如果指针j碰到大写字母，首先将i指针前进1，然后用temp字符保存下这个大写字母，然后用一个循环将j-i之间的小写字母前移一位，然后将s[i]置为保存的大写字母。
+#include<iostream>
+#include<string>
+using namespace std;
+int main()
+{
+	string str1;
+	while (cin >> str1)
+	{
+		int i = str1.length() ;//指向末尾的指针
+		int j = i -1;//指向前一个
+ 
+		while (j >= 0)
+		{
+			if (isupper(str1[j]))//如果是大写字母
+			{
+				char temp = str1[j];
+				int t = j;
+				i--;
+				while (t < i)//将j-i间的小写字母前移
+				{
+					str1[t] = str1[t+1];
+					t++;
+				}
+				str1[i] = temp;
+			}
+			j--;
+		}
+		cout << str1 << endl;
+		
+	}
+	
+	return 0;
+}
