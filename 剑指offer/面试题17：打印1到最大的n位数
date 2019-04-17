@@ -1,0 +1,33 @@
+7//打印从1到最大的n位的十进制数，比如输入3，则打印到最大的3位数999
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+/*
+//模拟加法 实现在表示字符串number上加1
+bool Increment(char* number)
+{
+	bool isOverflow=false;//溢出  代表整个n位数未达最大数
+	int nTakeOver=0;//进位
+	int nLength=strlen(number);
+	for(int i=nLength-1;i>=0;i--)
+	{
+		int nSum=number[i]-'0'+nTakeOver;//求出带进位的i的值 每次调用bumber[i]的值已经发生变化，依次是0-9
+		//如果是最个位，加一
+		if(i==nLength-1)    
+			nSum++;
+		//需要进位
+		if(nSum>=10)
+		{ 
+			//最高位number[0]为0，要进位，代表已经是最大数
+			if(i==0)
+				isOverflow=true;
+			else
+			{
+				nSum-=10;
+				//使下一位的开始值从0变为1
+				nTakeOver=1;
+				number[i]='0'+nSum;//该句之后，for 循环跳到字符串的下一位，本位上依旧从0开始，相当于各位恢复到0，下次for循环从十位开始
+			}
+		}
+		else //该位数字在0以
