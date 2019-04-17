@@ -1,0 +1,81 @@
+//调整数组的顺序使奇数位于偶数的前面
+//输入一个整数数组，实现一个函数来调整数组中数字的顺序，使得奇数位于前半部分，偶数位于后半部分 
+#include<stdio.h>
+#include<stdlib.h>
+
+/*  基础代码
+void ReorderOddEven(int *pData,unsigned int length)
+{
+	if(pData==nullptr||length==0)
+		return;
+
+	int *pBegin=pData;
+	int *pEnd=pData+length-1;
+
+	while(pBegin<pEnd)
+	{
+		while(pBegin<pEnd&&(*pBegin&0x1)!=0)  //不是偶数
+			pBegin++;
+
+		while(pBegin<pEnd&&(*pEnd&0x1)==0)   //不是奇数
+			pEnd--;
+
+		//将两个指针指向的奇偶数进行交换
+		if(pBegin<pEnd)
+		{
+			int temp=*pBegin;
+			*pBegin=*pEnd;
+			*pEnd=temp;
+		}
+	}
+}
+*/
+
+//Reorder函数根据func的标准把数组pData分为两部分 解耦操作：使用函数指针（*fun)(int)
+void Reorder(int *pData,unsigned int length,bool(*func)(int))
+{
+	if(pData==nullptr||length==0)
+		return;
+
+	int *pBegin=pData;
+	int *pEnd=pData+length-1;
+
+	while(pBegin<pEnd)
+	{
+		while(pBegin<pEnd&&!func(*pBegin))  //不是偶数
+			pBegin++;
+
+		while(pBegin<pEnd&&func(*pEnd))   //不是奇数
+			pEnd--;
+
+		//将两个指针指向的奇偶数进行交换
+		if(pBegin<pEnd)
+		{
+			int temp=*pBegin;
+			*pBegin=*pEnd;
+			*pEnd=temp;
+		}
+	}
+}
+
+//具体标准：判断是否为偶数  当需解决同一类型的问题时，通用的方法就是修改标准即可
+bool isEven(int n)
+{
+	return(n&1)==0;
+}
+
+void ReorderOddEven(int *pData,unsigned int length)
+{
+	Reorder(pData,length,isEven);
+}
+
+int main()
+{
+	int pData[5]={1,2,3,4,5};
+	ReorderOddEven(pData,5);
+	for(int i=0;i<5;i++)
+	{
+		printf("%d\n",pData[i]);
+	}
+	return 0;
+}
