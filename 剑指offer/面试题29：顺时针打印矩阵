@@ -1,0 +1,177 @@
+//一.题目描述输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，
+//例如，如果输入如下矩阵： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10。
+/*
+#include<iostream>
+#include<vector>
+#include<cassert>
+using namespace std;
+
+class Solution
+{
+public:
+    vector<int> PrintMatrix(vector<vector<int>> matrix)
+    {
+		//记录行环开始的行和列
+        int rows1=0;
+        int cols1=0;
+        int rows2=matrix.size();  //4    行号最大值
+        int cols2=matrix[0].size();//4   列号最大值
+        assert(!matrix.empty());
+        vector<int> result;
+        while(rows1 < rows2 && cols1 < cols2)
+        {
+            //左-->右
+            for(int i=cols1;i<cols2;i++)
+            {
+                result.push_back(matrix[rows1][i]);
+            }
+            rows1++;
+            //上-->下
+            for(int i=rows1;i<rows2;i++)
+            {
+                result.push_back(matrix[i][cols2-1]);
+            }
+            cols2--;
+            //右-->左
+            for(int i=cols2-1;i>=cols1;i--)
+            {
+                result.push_back(matrix[rows2-1][i]);
+            }
+            rows2--;
+            //下-->上
+            for(int i=rows2-1;i>=rows1;i--)
+            {
+                result.push_back(matrix[i][cols1]);
+            }
+            cols1++;
+        }
+        return result;
+    }
+    void ShowMatrix(vector<int> result)
+    {
+        assert(!result.empty());
+        for(size_t i=0;i<result.size();i++)
+        {
+            cout<<result[i]<<" ";
+        }
+        cout<<endl;
+    }
+};
+
+int main()
+{
+    Solution so;
+    vector<vector<int>> matrix;
+    vector<int> tmp;
+    //1,2,3,4
+    for(int i=1;i<=4;i++)
+    {
+        tmp.push_back(i);
+    }
+    matrix.push_back(tmp);
+    for(int i=1;i<=4;i++)
+    {
+        tmp.pop_back();
+    }
+    //5,6,7,8
+    for(int i=5;i<=8;i++)
+    {
+        tmp.push_back(i);
+    }
+    matrix.push_back(tmp);
+    for(int i=1;i<=4;i++)
+    {
+        tmp.pop_back();
+    }
+	
+    //9,10,11,12
+    for(int i=9;i<=12;i++)
+    {
+        tmp.push_back(i);
+    }
+    matrix.push_back(tmp);
+    for(int i=1;i<=4;i++)
+    {
+        tmp.pop_back();
+    }
+    //13,14,15,16
+	
+    for(int i=13;i<=16;i++)
+    {
+        tmp.push_back(i);
+    }
+    matrix.push_back(tmp);
+
+    vector<int> result=so.PrintMatrix(matrix);
+    so.ShowMatrix(result);
+    system("pause");
+    return 0;
+}
+*/
+#include<stdio.h>
+#include<stdlib.h>
+
+
+void PrintMatrixInCicle(int ** number,int columns,int rows,int start)
+{
+	int endX=columns-1-start;
+	int endY=rows-1-start;
+	int numbers[][4]={{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}};;
+	//左->右 start 为左上角坐标
+	for(int i=start;i<=endX;i++)
+	{
+		int number=numbers[start][i]; 
+		printf("%d ",number);
+	}
+	//上->下  终止行号大于起始行号
+	if(start<endY)
+	{
+		for(int i=start+1;i<=endY;++i)
+		{
+			int number=numbers[i][endX];
+			printf("%d ",number);
+		}
+    }
+	//右->左   终止行号大于起始行号，终止列号大于起始列号 圈内至少有两行
+	if(start<endX&&start<endY)
+	{
+		for(int i=endX-1;i>=start;--i)
+		{
+			int number=numbers[endY][i];
+			printf("%d ",number);
+		}
+
+	}
+	//下->上  至少有三行两列 终止行比起始行至少大于2，终止列号大于起始列号
+	if(start<endX&&start<endY-1)
+	{
+		for(int i=endY-1;i>=start+1;--i)
+		{
+			int number=numbers[i][start];
+			printf("%d ",number);
+		}
+	}
+}
+
+void PrintMatrixClockwisely(int *numbers,int columns,int rows)  
+{
+	if(numbers==nullptr||columns<=0||rows<=0) //判断合法
+	return;
+
+	int start=0;
+
+	while(columns>start*2&&rows>start>start*2)
+	{
+		PrintMatrixInCicle((int **)numbers,columns,rows,start);
+		++start;
+	}
+}
+int main()
+{
+
+	int numbers[][4]={{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}};
+	
+	PrintMatrixClockwisely(*numbers,4,4);
+	return 0;
+
+}
