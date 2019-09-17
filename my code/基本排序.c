@@ -171,14 +171,3 @@ int main()
 	cout<<endl;
 	return 0;
 }
-	//insertSort(q);
-	//shellSort(q);
-	//mergeSort(q,0,q.size()-1);
-	
-	cout<<mergeSortReverse(q,0,q.size()-1)<<endl;
-
-	for(auto x:q)
-		cout<<x<<' ';
-	cout<<endl;
-	return 0;
-}
